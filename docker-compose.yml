@@ -1,0 +1,45 @@
+version: "3.6"
+
+services:
+
+  keycloak:
+    environment:
+      - DB_VENDOR=${DB_KEYCLOAK_VENDOR}
+      - DB_ADDR=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_KEYCLOAK_DATABASE}
+      - DB_USER=${DB_KEYCLOAK_USER}
+      - DB_PASSWORD=${DB_KEYCLOAK_PASSWORD}
+      - KEYCLOAK_USER=${KEYCLOAK_USER}
+      - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
+    build: ./backend/keycloak/build/dev
+    ports:
+      - 8080:8080
+    networks:
+      - constrsw
+    depends_on:
+      - postgres
+
+  postgres:
+    environment:
+      - POSTGRES_FIX_OWNERSHIP=1
+      - POSTGRES_DB=${DB_POSTGRES_DATABASE}
+      - POSTGRES_USER=${DB_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${DB_POSTGRES_PASSWORD}
+      - DB_KEYCLOAK_DATABASE=${DB_KEYCLOAK_DATABASE}
+      - DB_KEYCLOAK_USER=${DB_KEYCLOAK_USER}
+      - DB_KEYCLOAK_PASSWORD=${DB_KEYCLOAK_PASSWORD}
+    build: ./backend/postgres
+    ports:
+      - ${DB_POSTGRES_PORT}:5432
+    volumes:
+      - constrsw-pgdata:${DB_POSTGRES_DATA}:rw
+    networks:
+      - constrsw
+
+volumes:
+  constrsw-pgdata:
+    external: true
+
+networks:
+  constrsw:

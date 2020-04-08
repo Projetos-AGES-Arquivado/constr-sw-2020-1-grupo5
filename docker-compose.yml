@@ -2,6 +2,19 @@ version: "3.6"
 
 services:
 
+  auth:
+    build:
+      context: ./backend/auth
+      dockerfile: build/dev/Dockerfile
+    volumes:
+        - ./backend/auth/src/:/home/node/app
+    ports:
+      - 3456:3456
+    networks:
+      - constrsw
+    depends_on:
+      - keycloak
+
   keycloak:
     environment:
       - DB_VENDOR=${DB_KEYCLOAK_VENDOR}

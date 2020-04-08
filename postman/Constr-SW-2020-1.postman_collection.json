@@ -1,0 +1,53 @@
+{
+	"info": {
+		"_postman_id": "a5136bb3-3247-4917-9293-8121122ef2e1",
+		"name": "Constr-SW-2020-1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3456/ping",
+					"host": [
+						"localhost"
+					],
+					"port": "3456",
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3456/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3456",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -3,10 +3,10 @@ var bodyParser = require('body-parser');
 var Keycloak = require('keycloak-connect');
 
 const kcConfig = {
-    "realm": "Test",
+    "realm": "Homolog",
     "auth-server-url": "http://host.docker.internal:8080/auth",
     "ssl-required": "external",
-    "resource": "Test",
+    "resource": "Homolog-Client",
     "public-client": true,
     "confidential-port": 0
 };

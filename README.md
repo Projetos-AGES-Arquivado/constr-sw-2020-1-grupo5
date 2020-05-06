@@ -11,4 +11,4 @@ Body =
         "password": "abc123"
     }
 
-
+![Diagrama](ClassDiagram.png)

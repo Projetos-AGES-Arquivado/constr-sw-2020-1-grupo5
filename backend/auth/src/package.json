@@ -6,7 +6,7 @@
   "scripts": {
     "build": "yarn run prestart && yarn build",
     "prestart": "yarn install",
-    "start": "nodemon app.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "firebase-admin": "^8.10.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "sucrase": "^3.13.0"
   }
 }

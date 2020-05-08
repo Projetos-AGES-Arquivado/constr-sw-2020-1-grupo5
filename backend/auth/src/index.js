@@ -1,6 +1,9 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 var Keycloak = require('keycloak-connect');
+const admin = require('./database/connection');
+
+const db = admin.firestore();
 
 const kcConfig = {
     "realm": "Homolog",
@@ -33,6 +36,26 @@ app.post('/login', (req, res) => {
       res.send(error).status(401);
     });
 });
+
+app.get('/buildings', (req, res) => {
+  try {
+    const buildingCollection = db.collection('predios');
+    const results = [];
+
+    buildingCollection
+    .get()
+    .then((snapshot) => {
+      return snapshot.forEach((res) => {
+        results.push(res.data());
+      });
+    });
+    res.status(200).json(results);
+  } catch (e) {
+    return response.status(500).json({
+      error: `Erro durante o processamento de busca de mentorias. Espere um momento e tente novamente! Erro : ${e}`,
+    });
+  }
+})
 
 module.exports.start = port =>
   app.listen(port, () => console.log(`Listening on port ${port}`));

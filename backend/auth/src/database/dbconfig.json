@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "reserva-predio",
+    "private_key_id": "1f63231fc50c0bc5b39875b641ff9a21640ee915",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC2p+p1JOQ9mBBi\nyfNIp/0pq5fCjP+eVwKSsBSSfzGdx9Ma64FdtbHHQR7v5UOtA45411tIpXOLmr6c\niDqMH18PWWAhWa83Fstp4Ded1QrmL3PaY5P+TPrShzDj0QVW3uGBi1Z7dCkM+z4B\npWH5/CVUDp4rnwd4Y5QmRglLXBGn1zFxshSgQuDqvr8GIti+nmEYHdrgHENiZ8dL\nEbe9ARdUWlcXuzNwKHdBcW2dkmYubcfI3ghxZQJ8mkNv/eRq3PUy6+mGXNziwQvU\n0T7OOh4SAJ/bnleZqyN+q2E1nH2oZnE2miZC7wQfdobfE9EG5hV2itUxoCSrUCPm\nq6lhmearAgMBAAECggEAAYXr8BcjKhpTBKffdfskoszSAqbPWOAr3tJGEaSq4sBw\nU7ikBwaFWX6DBggY5N/zN7HACp6KlJ7xOPfv2QxH7CZYJV8MlX6EqrjabeABa8L4\nidkrukKlEs1azIOJMlzAb6acTYI992Q+85+P7hg6rXVDv2RfmRLngNwzpqO5Z/dh\nTGeL+axIvuFvVs3u7MMZt7uGd9c7OafyRCIHHpZ5UPoUAMBXoufYCnXju3qSaqYo\nIDpogyEaHJ6iLpnmtBtN9gP0CyDY0ASvvmjOEqsIGmsdHxI7eQ3G/1VNABoYRfoy\n5aNDAgELl+/ogcCNWXf5ncpu26yGU9XhjAgc2111SQKBgQDtY2w5H9/IIcGnj06b\nem+fBGFcl2DLu/4pU8BllmWRHkZv6ICBShTqM2BJ5OQNpPcMO3heI13BUqTaJsgR\nnDguW4/e4wBhUCvfcxh7xHVRmgGCYZMZZdZHopW0DRG15dvlgqvt3rNXjhC3bZpd\nGIKYFaab+xB+rAFUFqYqW3oB6QKBgQDE+ffrU0u2khjcVEV+SY7L/hMPU+GdLXnQ\nhR2svSpxJ5sOYPS3p1+yYx7eOGvgg5LxteabTBnhB+HUcqC33lUcakEUM+zJ3Uxx\nbli9qey5DVNqNqhh51v6fY4ka7fO/KPma/OKAk4hr2BzFhoUIFv0eIY7gVTb7tCf\nmsd7DXjTcwKBgQC3EPEorHf68m1RNqa8KBNkYhBjQyoWc4dxf3Dj5rO00dAoBPj0\nu5idc7lRwv5Lt2f9Ou98SXHH4F/ZDAdF7V82AM5WaGCmqxjqXOwIplyC7W00iuLR\nt0MkQzGHhHyf9f86YycLba6IWrpxekiMepZbinbN2zPBPAxaOI00JQ9V4QKBgQCM\nrQ2PhnSbVinlKVZcRAJ00+ce2kRWMcU+0+MGnC70k1mc4kfD5ghlaX8BLAB3XuCS\nOdwRaz9MRInXZWo9Bs94NLZ3zEG/RYoztKAyDGqhGtBJGfIVwdshwYvDnR6v+CTC\nCrTrCoxsaEkUyGMlnpqttWoAk3RcgmmCo1L2If/52wKBgQCxdi7wze8AJCsIJifQ\nn99oKzv7vFMfSaCdwkZm0MOdsI46shMpTbWR3ZUyowdkUQaGdhjxy0QVqa9vO6PA\nH7ax0xUbt8UOjVIGgysIUoTN/nXJ8M2QKqoubXg+TPXuq6mwn32aCNsOWdWmZ5+V\ngVx51HGV3TmnclRvOPy6ZxiE/g==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-yrw3w@reserva-predio.iam.gserviceaccount.com",
+    "client_id": "103690886441087577947",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-yrw3w%40reserva-predio.iam.gserviceaccount.com"
+  }
+  

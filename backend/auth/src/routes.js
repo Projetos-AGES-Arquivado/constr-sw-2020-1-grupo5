@@ -10,7 +10,7 @@ routes.get('/ping', oauthController.get)
 routes.post('/login', oauthController.post)
 
 //Building CRUD
-routes.get('/buildings', buildingController.get)
+routes.get('/buildings', buildingController.getAll)
 
 //Room CRUD
 

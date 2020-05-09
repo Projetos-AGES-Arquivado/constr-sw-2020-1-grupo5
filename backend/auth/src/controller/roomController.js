@@ -16,7 +16,7 @@ async function getBuilding(buildingID) {
                 }
 
             });
-        });
+        })
     if (!building) {
         return null;
     }
@@ -30,13 +30,12 @@ module.exports = {
         const buildingID = request.params.buildingId;
         const building = await getBuilding(buildingID)
         const result = []
-        
-       const room =  await db.collection('predios').doc(building.id)
+        if(!building){
+            return response.status(400).send("No rooms found")
+        }
+        await db.collection('predios').doc(building.id)
         .collection('salas')
-        if (!room){
-            response.status(401).send("No rooms where found")
-        } 
-        await room.get()
+        .get()
         .then((snapshot) => {
             return snapshot.forEach((res) => {
                 const data = res.data()
@@ -45,6 +44,11 @@ module.exports = {
                     capacidade: data.capacidade
                 })
             });
+        })
+        .catch( (error) => {
+            return response.status.status(500).json({
+                error: `Erro ao verificar salas : ${e}`,
+              });
         });
 
         console.log(result)

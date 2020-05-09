@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import buildingController from './controller/buildingController';
 import oauthController from './controller/oauthController';
+import roomController from './controller/roomController';
 
 const routes = new Router();
 
@@ -13,6 +14,7 @@ routes.post('/login', oauthController.post)
 routes.get('/buildings', buildingController.getAll)
 
 //Room CRUD
+routes.get('/building=:buildingId/rooms', roomController.getAll)
 
 
 

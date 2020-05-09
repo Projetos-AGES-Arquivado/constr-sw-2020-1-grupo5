@@ -34,5 +34,47 @@ module.exports = {
           error: `Erro durante o processamento de busca de usuários. Espere um momento e tente novamente! Erro : ${e}`,
         });
       }
+    },
+
+    //INSERE NOVO PRÉDIO NA COLEÇÃO DE PRÉDIOS
+    async insert(request, response) {
+
+      try {
+        const {campus, totalDeSalas, nomeDoPredio, codigoDoPredio, } = request.body
+
+        const buildingCollection = db.collection('predios')
+
+        let firebaseBuiding = null
+
+        await buildingCollection
+        .where('codigoDoPredio', '==', codigoDoPredio)
+        .get()
+        .then((snapshot) => {
+          return snapshot.forEach((res) => {
+            firebaseBuiding = res.data() 
+          })
+        })
+
+        if (firebaseBuiding){
+          return response.status(401).send("Prédio com código já existente")
+        }
+
+        await buildingCollection.add({
+          codigoDoPredio: codigoDoPredio,
+          nomeDoPredio: nomeDoPredio,
+          campus: campus,
+          totalDeSalas: totalDeSalas
+        })
+
+        return response.status(200).send({success: true})
+
+      }
+
+      catch (e) {
+        return response.status(500).json({
+          error: `Erro ao inserir prédio : ${e}`,
+        });
+      }
+
     }
 }

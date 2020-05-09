@@ -11,10 +11,12 @@ routes.get('/ping', oauthController.get)
 routes.post('/login', oauthController.post)
 
 //Building CRUD
-routes.get('/buildings', buildingController.getAll)
+routes.get('/predios', buildingController.getAll)
+routes.post('/predios', buildingController.insert)
 
 //Room CRUD
-routes.get('/building=:buildingId/rooms', roomController.getAll)
+routes.get('/predio=:buildingId/salas', roomController.getAll)
+routes.post('/predio=:buildingId/salas', roomController.insert)
 
 
 

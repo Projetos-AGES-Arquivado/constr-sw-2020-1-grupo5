@@ -1,4 +1,5 @@
 import admin from '../database/connection';
+import { getTokenFromCode } from 'sucrase/dist/parser/tokenizer';
 
 const db = admin.firestore();
 
@@ -34,6 +35,39 @@ module.exports = {
         error: `Erro durante o processamento de busca de usuários. Espere um momento e tente novamente! Erro : ${e}`,
       });
     }
+  },
+
+  async getOne(request, response) {
+    try {
+      const buildingID = request.params.buildingId
+
+      const buildingCollection = db.collection('predios')
+
+      let building = null
+
+      await buildingCollection
+        .where('codigoDoPredio', '==', buildingID)
+        .get()
+        .then((snapshot) => {
+          return snapshot.forEach((res) => {
+            building = res.data()
+          })
+        })
+
+      if (!building) {
+        return response.status(401).send(`Prédio com código ${buildingID} não existe`)
+      }
+
+      return response.status(200).json(building);
+
+    }
+
+    catch (e) {
+      return response.status(500).json({
+        error: `Erro ao consultar prédio : ${e}`,
+      });
+    }
+
   },
 
   //INSERE NOVO PRÉDIO NA COLEÇÃO DE PRÉDIOS
@@ -83,11 +117,7 @@ module.exports = {
     try {
       const buildingID = request.params.buildingId
 
-      console.log(request.params.buildingId)
-
       const { campus, totalDeSalas, nomeDoPredio } = request.body
-
-      console.log(request.body)
 
       const buildingCollection = db.collection('predios')
 

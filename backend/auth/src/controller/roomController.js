@@ -74,6 +74,39 @@ module.exports = {
         response.status(200).send(result)
     },
 
+    async getOne(request, response) {
+
+        try {
+            const buildingID = request.params.buildingId;
+            const roomID = request.params.roomId;
+
+            const building = await getBuilding(buildingID);
+
+            if (!building) {
+                return response.status(400).send(`Nenhum prédio encontrado com o id ${buildingID}`)
+            }
+
+            const collection = await await db.collection('predios').doc(building.id)
+                .collection('salas')
+
+            const firebaseRoom = await getRoom(collection, roomID)
+
+            if (!firebaseRoom) {
+                return response.status(404).send(`Sala com número ${numeroDaSala} não existe`)
+            }
+
+            response.status(200).send(firebaseRoom.data)
+
+            return response.status(200).send({ success: true });
+
+        } catch (e) {
+            return response.status(500).json({
+                error: `Erro ao inserir sala : ${e}`,
+            });
+        }
+
+    },
+
     async insert(request, response) {
 
         try {
@@ -90,8 +123,6 @@ module.exports = {
                 .collection('salas')
 
             const firebaseRoom = await getRoom(collection, numeroDaSala)
-
-            console.log(firebaseRoom)
 
             if (firebaseRoom) {
                 return response.status(401).send(`Sala com número ${numeroDaSala} já existente`)
@@ -154,13 +185,13 @@ module.exports = {
         }
     },
 
-    async delete(request, response){
+    async delete(request, response) {
 
-        try{
-        const buildingID = request.params.buildingId;
-        const roomID = request.params.roomId;
+        try {
+            const buildingID = request.params.buildingId;
+            const roomID = request.params.roomId;
 
-        const building = await getBuilding(buildingID);
+            const building = await getBuilding(buildingID);
 
             if (!building) {
                 return response.status(404).send(`Nenhum prédio encontrado com o id ${buildingID}`)
@@ -181,10 +212,10 @@ module.exports = {
                 .status(200)
                 .send({ success: true, msg: `Sala ${roomID} removida com sucesso` });
 
-        } catch(error){
+        } catch (error) {
             return response.status(500).json({
                 error: `Erro ao remover sala: ${error}`,
-              });
+            });
         }
 
     }

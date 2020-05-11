@@ -80,31 +80,31 @@ module.exports = {
 
   async update(request, response) {
 
-    try{
+    try {
       const buildingID = request.params.buildingId
 
-    console.log(request.params.buildingId)
+      console.log(request.params.buildingId)
 
-    const { campus, totalDeSalas, nomeDoPredio} = request.body
+      const { campus, totalDeSalas, nomeDoPredio } = request.body
 
-    console.log(request.body)
+      console.log(request.body)
 
-    const buildingCollection = db.collection('predios')
+      const buildingCollection = db.collection('predios')
 
-    let building = null
-    await buildingCollection
-      .where('codigoDoPredio', '==', buildingID)
-      .get()
-      .then((snapshot) => {
-        return snapshot.forEach((res) => {
-          building = {
-            id: res.id,
-            data: res.data()
-          }
-        });
-      })
+      let building = null
+      await buildingCollection
+        .where('codigoDoPredio', '==', buildingID)
+        .get()
+        .then((snapshot) => {
+          return snapshot.forEach((res) => {
+            building = {
+              id: res.id,
+              data: res.data()
+            }
+          });
+        })
 
-      if(!building){
+      if (!building) {
         return response.status(404).send(`Nenhum prédio encontrado com o código ${buildingID}`)
       }
 
@@ -117,9 +117,44 @@ module.exports = {
       return response
         .status(200)
         .send({ success: true, msg: 'Prédio atualizado com sucesso' });
-    } catch(error){
+    } catch (error) {
       return response.status(500).json({
         error: `Erro ao atualizar prédio : ${error}`,
+      });
+    }
+  },
+
+  async delete(request, response) {
+    try {
+      const buildingID = request.params.buildingId
+
+      const buildingCollection = db.collection('predios')
+
+      let building = null
+      await buildingCollection
+        .where('codigoDoPredio', '==', buildingID)
+        .get()
+        .then((snapshot) => {
+          return snapshot.forEach((res) => {
+            building = {
+              id: res.id,
+              data: res.data()
+            }
+          });
+        })
+
+      if (!building) {
+        return response.status(404).send(`Nenhum prédio encontrado com o código ${buildingID}`)
+      }
+
+      await buildingCollection.doc(building.id).delete()
+
+      return response
+        .status(200)
+        .send({ success: true, msg: `Prédio ${buildingID} removido com sucesso` });
+    } catch (error) {
+      return response.status(500).json({
+        error: `Erro ao remover prédio : ${error}`,
       });
     }
   }

@@ -152,5 +152,40 @@ module.exports = {
                 error: `Erro ao atualizar sala : ${error}`,
             });
         }
+    },
+
+    async delete(request, response){
+
+        try{
+        const buildingID = request.params.buildingId;
+        const roomID = request.params.roomId;
+
+        const building = await getBuilding(buildingID);
+
+            if (!building) {
+                return response.status(404).send(`Nenhum prédio encontrado com o id ${buildingID}`)
+            }
+
+            const collection = await await db.collection('predios').doc(building.id)
+                .collection('salas')
+
+            const firebaseRoom = await getRoom(collection, roomID)
+
+            if (!firebaseRoom) {
+                response.status(404).send(`Nenhuma sala encontrada com o número ${roomID}`);
+            }
+
+            collection.doc(firebaseRoom.id).delete()
+
+            return response
+                .status(200)
+                .send({ success: true, msg: `Sala ${roomID} removida com sucesso` });
+
+        } catch(error){
+            return response.status(500).json({
+                error: `Erro ao remover sala: ${error}`,
+              });
+        }
+
     }
 }

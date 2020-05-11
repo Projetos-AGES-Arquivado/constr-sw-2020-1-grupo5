@@ -28,13 +28,16 @@ async function getRoom(collection, roomNumber) {
     let room = null
 
     await collection
-    .where('numeroDaSala', '==', roomNumber)
-    .get()
-    .then((snapshot) => {
-        return snapshot.forEach((res) => {
-            room = res.data()
+        .where('numeroDaSala', '==', roomNumber)
+        .get()
+        .then((snapshot) => {
+            return snapshot.forEach((res) => {
+                room = {
+                    id: res.id,
+                    data: res.data()
+                }
+            })
         })
-    })
 
     return room
 }
@@ -90,7 +93,7 @@ module.exports = {
 
             console.log(firebaseRoom)
 
-            if (firebaseRoom){
+            if (firebaseRoom) {
                 return response.status(401).send(`Sala com número ${numeroDaSala} já existente`)
             }
 
@@ -111,5 +114,43 @@ module.exports = {
         }
 
 
+    },
+
+    async update(request, response) {
+        try {
+            const buildingID = request.params.buildingId;
+            const roomID = request.params.roomId;
+            const { tipoDeSala, capacidadeDeAlunos } = request.body;
+
+            const building = await getBuilding(buildingID);
+
+            if (!building) {
+                return response.status(404).send(`Nenhum prédio encontrado com o id ${buildingID}`)
+            }
+
+            const collection = await await db.collection('predios').doc(building.id)
+                .collection('salas')
+
+            const firebaseRoom = await getRoom(collection, roomID)
+
+            if (!firebaseRoom) {
+                response.status(404).send(`Nenhuma sala encontrada com o número ${roomID}`);
+            }
+
+            collection.doc(firebaseRoom.id).update({
+                tipoDeSala: tipoDeSala,
+                capacidadeDeAlunos: capacidadeDeAlunos
+            })
+
+            return response
+                .status(200)
+                .send({ success: true, msg: 'Sala atualizada com sucesso' });
+
+
+        } catch (error) {
+            return response.status(500).json({
+                error: `Erro ao atualizar sala : ${error}`,
+            });
+        }
     }
 }

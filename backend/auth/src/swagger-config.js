@@ -12,7 +12,7 @@ const swaggerConfig = {
             version: '1.0.0'
         }
     },
-    apis: ['./app.js']
+    apis: ['./app.js','./controller/*.js']
 }
 
 const swaggerDoc = swaggerJsDoc(swaggerConfig);

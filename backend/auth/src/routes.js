@@ -11,7 +11,7 @@ routes.get('/ping', oauthController.get)
 routes.post('/login', oauthController.post)
 
 //Building CRUD
-routes.get('/predios', buildingController.getAll)
+routes.get('/buildings', buildingController.getAll)
 routes.get('/predio=:buildingId', buildingController.getOne)
 routes.post('/predios', buildingController.insert)
 routes.put('/predio=:buildingId', buildingController.update)

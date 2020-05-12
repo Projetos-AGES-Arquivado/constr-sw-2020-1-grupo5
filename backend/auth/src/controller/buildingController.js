@@ -23,6 +23,17 @@ async function getBuildings() {
 
 // Exported functions
 module.exports = {
+  
+  /**
+   * @swagger
+   * /buildings:
+   *  get:
+   *    description: use to request all buildings
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   * 
+   */
   async getAll(request, response) {
     try {
       const buildings = await getBuildings();

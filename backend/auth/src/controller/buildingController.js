@@ -48,6 +48,24 @@ module.exports = {
     }
   },
 
+  /**
+   * @swagger
+   * /building={buildingId}:
+   *  get:
+   *    description: use to request only one building
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      401:
+   *        description: Building doesn't exit
+   *      500:
+   *        description: Error consulting building
+   */
   async getOne(request, response) {
     try {
       const buildingID = request.params.buildingId
@@ -165,6 +183,24 @@ module.exports = {
     }
   },
 
+  /**
+   * @swagger
+   * /building={buildingId}:
+   *  delete:
+   *    description: use to delete one building
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      404:
+   *        description: There is no building with this code
+   *      500:
+   *        description: Error removing building
+   */
   async delete(request, response) {
     try {
       const buildingID = request.params.buildingId

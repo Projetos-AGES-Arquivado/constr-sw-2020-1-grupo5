@@ -44,7 +44,26 @@ async function getRoom(collection, roomNumber) {
 
 
 // Exported functions
+
 module.exports = {
+    /**
+   * @swagger
+   * /building={buildingId}/rooms:
+   *  get:
+   *    description: use to request all rooms
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      400:
+   *        description: Room not founded
+   *      500:
+   *        description: Error consulting room
+   */
     async getAll(request, response) {
         const buildingID = request.params.buildingId;
         const building = await getBuilding(buildingID)
@@ -74,6 +93,28 @@ module.exports = {
         response.status(200).send(result)
     },
 
+    /**
+   * @swagger
+   * /building={buildingId}/room={roomId}:
+   *  get:
+   *    description: use to request only one room
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *      - in: path
+   *        name: roomId
+   *        required: true
+   *        type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      400:
+   *        description: There is no building with this Id
+   *      404:
+   *        description: No exist room with this number
+   */
     async getOne(request, response) {
 
         try {
@@ -185,6 +226,28 @@ module.exports = {
         }
     },
 
+    /**
+   * @swagger
+   * /building={buildingId}/room={roomId}:
+   *  delete:
+   *    description: use to delete one room
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *      - in: path
+   *        name: roomId
+   *        required: true
+   *        type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      404:
+   *        description: There is no room with this number
+   *      500:
+   *        description: Error removing room
+   */
     async delete(request, response) {
 
         try {

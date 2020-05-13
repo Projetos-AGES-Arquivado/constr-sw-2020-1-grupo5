@@ -3,9 +3,9 @@ import keycloak from '../keycloack-config/keycloack';
 // Exported functions
 module.exports = {
 
-    post(req, res) {
+    async post(req, res) {
         
-        keycloak.grantManager
+        await keycloak.grantManager
             .obtainDirectly(req.body.login, req.body.password)
             .then(grant => {
                 res.json(grant).status(200);

@@ -156,6 +156,42 @@ module.exports = {
 
     },
 
+    /**
+   * @swagger
+   * /building/{buildingId}/rooms:
+   *  post:
+   *    tags: [Room]
+   *    description: use to create a new room
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *      - in: body
+   *        name: room
+   *        schema:
+   *          type: object
+   *          required:
+   *            - numeroDaSala
+   *            - tipoDeSala
+   *            - capacidadeDeAlunos
+   *          properties:
+   *            numeroDaSala: 
+   *              type: string
+   *            tipoDeSala:
+   *              type: string
+   *            capacidadeDeAlunos:
+   *              type: integer
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      400:
+   *        description: There is no building with this Id
+   *      401:
+   *        description: Already exist a room with this number
+   *      500:
+   *        description: Error inserting room
+   */
     async insert(request, response) {
 
         try {
@@ -196,6 +232,43 @@ module.exports = {
 
     },
 
+    /**
+   * @swagger
+   * /building/{buildingId}/room/{roomId}:
+   *  put:
+   *    tags: [Room]
+   *    description: use to update a room
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *      - in: path
+   *        name: roomId
+   *        required: true
+   *        type: string
+   *      - in: body
+   *        name: room
+   *        schema:
+   *          type: object
+   *          required:
+   *            - tipoDeSala
+   *            - capacidadeDeAlunos
+   *          properties:
+   *            tipoDeSala:
+   *              type: string
+   *            capacidadeDeAlunos:
+   *              type: integer
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      401:
+   *        description: There is no room with this Id
+   *      404:
+   *        description: There is no building with this Id
+   *      500:
+   *        description: Error updating room
+   */
     async update(request, response) {
         try {
             const buildingID = request.params.buildingId;
@@ -214,7 +287,7 @@ module.exports = {
             const firebaseRoom = await getRoom(collection, roomID)
 
             if (!firebaseRoom) {
-                response.status(404).send(`Nenhuma sala encontrada com o número ${roomID}`);
+                response.status(401).send(`Nenhuma sala encontrada com o número ${roomID}`);
             }
 
             collection.doc(firebaseRoom.id).update({

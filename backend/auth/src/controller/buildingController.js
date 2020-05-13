@@ -107,6 +107,39 @@ module.exports = {
 
   },
 
+  /**
+   * @swagger
+   * /buildings:
+   *  post:
+   *    tags: [Building]
+   *    description: use to create a new building
+   *    parameters:
+   *      - in: body
+   *        name: building
+   *        schema:
+   *          type: object
+   *          required:
+   *            - campus
+   *            - totalDeSalas
+   *            - nomeDoPredio
+   *            - codigoDoPredio
+   *          properties:
+   *            campus: 
+   *              type: string
+   *            totalDeSalas:
+   *              type: integer
+   *            nomeDoPredio:
+   *              type: string
+   *            codigoDoPredio:
+   *              type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      401:
+   *        description: The code already exist
+   *      500:
+   *        description: Error inserting building
+   */
   //INSERE NOVO PRÉDIO NA COLEÇÃO DE PRÉDIOS
   async insert(request, response) {
 
@@ -149,6 +182,40 @@ module.exports = {
 
   },
 
+   /**
+   * @swagger
+   * /building/{buildingId}:
+   *  put:
+   *    tags: [Building]
+   *    description: use to update a building
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *      - in: body
+   *        name: building
+   *        schema:
+   *          type: object
+   *          required:
+   *            - campus
+   *            - totalDeSalas
+   *            - nomeDoPredio
+   *          properties:
+   *            campus:
+   *              type: string
+   *            totalDeSalas:
+   *              type: integer
+   *            nomeDoPredio:
+   *              type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      404:
+   *        description: There is no building with this Id
+   *      500:
+   *        description: Error updating building
+   */
   async update(request, response) {
 
     try {

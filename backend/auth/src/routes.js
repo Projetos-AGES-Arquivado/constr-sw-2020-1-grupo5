@@ -12,18 +12,18 @@ routes.post('/login', oauthController.post)
 
 //Building CRUD
 routes.get('/buildings', buildingController.getAll)
-routes.get('/building/:buildingId', buildingController.getOne)
+routes.get('/buildings/:buildingId', buildingController.getOne)
 routes.post('/buildings', buildingController.insert)
-routes.put('/building/:buildingId', buildingController.update)
-routes.delete('/building/:buildingId', buildingController.delete)
+routes.put('/buildings/:buildingId', buildingController.update)
+routes.delete('/buildings/:buildingId', buildingController.delete)
 
 
 //Room CRUD
-routes.get('/building/:buildingId/rooms', roomController.getAll)
-routes.get('/building/:buildingId/room/:roomId', roomController.getOne)
-routes.post('/building/:buildingId/rooms', roomController.insert)
-routes.put('/building/:buildingId/room/:roomId', roomController.update)
-routes.delete('/building/:buildingId/room/:roomId', roomController.delete)
+routes.get('/buildings/:buildingId/rooms', roomController.getAll)
+routes.get('/buildings/:buildingId/rooms/:roomId', roomController.getOne)
+routes.post('/buildings/:buildingId/rooms', roomController.insert)
+routes.put('/buildings/:buildingId/rooms/:roomId', roomController.update)
+routes.delete('/buildings/:buildingId/rooms/:roomId', roomController.delete)
 
 
 

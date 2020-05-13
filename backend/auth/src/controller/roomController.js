@@ -54,7 +54,7 @@ module.exports = {
  */
     /**
    * @swagger
-   * /building={buildingId}/rooms:
+   * /buildings/{buildingId}/rooms:
    *  get:
    *    tags: [Room]
    *    description: use to request all rooms
@@ -102,7 +102,7 @@ module.exports = {
 
     /**
    * @swagger
-   * /building={buildingId}/room={roomId}:
+   * /buildings/{buildingId}/rooms/{roomId}:
    *  get:
    *    tags: [Room]
    *    description: use to request only one room
@@ -158,7 +158,7 @@ module.exports = {
 
     /**
    * @swagger
-   * /building/{buildingId}/rooms:
+   * /buildings/{buildingId}/rooms:
    *  post:
    *    tags: [Room]
    *    description: use to create a new room
@@ -234,7 +234,7 @@ module.exports = {
 
     /**
    * @swagger
-   * /building/{buildingId}/room/{roomId}:
+   * /buildings/{buildingId}/rooms/{roomId}:
    *  put:
    *    tags: [Room]
    *    description: use to update a room
@@ -309,7 +309,7 @@ module.exports = {
 
     /**
    * @swagger
-   * /building={buildingId}/room={roomId}:
+   * /buildings/{buildingId}/rooms/{roomId}:
    *  delete:
    *    tags: [Room]
    *    description: use to delete one room

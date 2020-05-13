@@ -57,7 +57,7 @@ module.exports = {
 
   /**
    * @swagger
-   * /building={buildingId}:
+   * /buildings/{buildingId}:
    *  get:
    *    tags: [Building]
    *    description: use to request only one building
@@ -184,7 +184,7 @@ module.exports = {
 
    /**
    * @swagger
-   * /building/{buildingId}:
+   * /buildings/{buildingId}:
    *  put:
    *    tags: [Building]
    *    description: use to update a building
@@ -260,7 +260,7 @@ module.exports = {
 
   /**
    * @swagger
-   * /building={buildingId}:
+   * /buildings/{buildingId}:
    *  delete:
    *    tags: [Building]
    *    description: use to delete one building

@@ -23,11 +23,18 @@ async function getBuildings() {
 
 // Exported functions
 module.exports = {
-  
+  /**
+ * @swagger
+ * tags:
+ *   name: Building
+ *   description: Building collection
+ */
+
   /**
    * @swagger
    * /buildings:
    *  get:
+   *    tags: [Building]
    *    description: use to request all buildings
    *    responses:
    *      200:
@@ -52,6 +59,7 @@ module.exports = {
    * @swagger
    * /building={buildingId}:
    *  get:
+   *    tags: [Building]
    *    description: use to request only one building
    *    parameters:
    *      - in: path
@@ -187,6 +195,7 @@ module.exports = {
    * @swagger
    * /building={buildingId}:
    *  delete:
+   *    tags: [Building]
    *    description: use to delete one building
    *    parameters:
    *      - in: path

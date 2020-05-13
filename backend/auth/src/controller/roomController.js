@@ -47,9 +47,16 @@ async function getRoom(collection, roomNumber) {
 
 module.exports = {
     /**
+ * @swagger
+ * tags:
+ *   name: Room
+ *   description: Room collection
+ */
+    /**
    * @swagger
    * /building={buildingId}/rooms:
    *  get:
+   *    tags: [Room]
    *    description: use to request all rooms
    *    parameters:
    *      - in: path
@@ -97,6 +104,7 @@ module.exports = {
    * @swagger
    * /building={buildingId}/room={roomId}:
    *  get:
+   *    tags: [Room]
    *    description: use to request only one room
    *    parameters:
    *      - in: path
@@ -230,6 +238,7 @@ module.exports = {
    * @swagger
    * /building={buildingId}/room={roomId}:
    *  delete:
+   *    tags: [Room]
    *    description: use to delete one room
    *    parameters:
    *      - in: path

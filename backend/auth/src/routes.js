@@ -12,18 +12,18 @@ routes.post('/login', oauthController.post)
 
 //Building CRUD
 routes.get('/buildings', buildingController.getAll)
-routes.get('/predio=:buildingId', buildingController.getOne)
-routes.post('/predios', buildingController.insert)
-routes.put('/predio=:buildingId', buildingController.update)
-routes.delete('/predio=:buildingId', buildingController.delete)
+routes.get('/buildings/:buildingId', buildingController.getOne)
+routes.post('/buildings', buildingController.insert)
+routes.put('/buildings/:buildingId', buildingController.update)
+routes.delete('/buildings/:buildingId', buildingController.delete)
 
 
 //Room CRUD
-routes.get('/predio=:buildingId/salas', roomController.getAll)
-routes.get('/predio=:buildingId/sala=:roomId', roomController.getOne)
-routes.post('/predio=:buildingId/salas', roomController.insert)
-routes.put('/predio=:buildingId/sala=:roomId', roomController.update)
-routes.delete('/predio=:buildingId/sala=:roomId', roomController.delete)
+routes.get('/buildings/:buildingId/rooms', roomController.getAll)
+routes.get('/buildings/:buildingId/rooms/:roomId', roomController.getOne)
+routes.post('/buildings/:buildingId/rooms', roomController.insert)
+routes.put('/buildings/:buildingId/rooms/:roomId', roomController.update)
+routes.delete('/buildings/:buildingId/rooms/:roomId', roomController.delete)
 
 
 

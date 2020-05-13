@@ -23,11 +23,18 @@ async function getBuildings() {
 
 // Exported functions
 module.exports = {
-  
+  /**
+ * @swagger
+ * tags:
+ *   name: Building
+ *   description: Building collection
+ */
+
   /**
    * @swagger
    * /buildings:
    *  get:
+   *    tags: [Building]
    *    description: use to request all buildings
    *    responses:
    *      200:
@@ -48,6 +55,25 @@ module.exports = {
     }
   },
 
+  /**
+   * @swagger
+   * /buildings/{buildingId}:
+   *  get:
+   *    tags: [Building]
+   *    description: use to request only one building
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      401:
+   *        description: Building doesn't exit
+   *      500:
+   *        description: Error consulting building
+   */
   async getOne(request, response) {
     try {
       const buildingID = request.params.buildingId
@@ -81,6 +107,39 @@ module.exports = {
 
   },
 
+  /**
+   * @swagger
+   * /buildings:
+   *  post:
+   *    tags: [Building]
+   *    description: use to create a new building
+   *    parameters:
+   *      - in: body
+   *        name: building
+   *        schema:
+   *          type: object
+   *          required:
+   *            - campus
+   *            - totalDeSalas
+   *            - nomeDoPredio
+   *            - codigoDoPredio
+   *          properties:
+   *            campus: 
+   *              type: string
+   *            totalDeSalas:
+   *              type: integer
+   *            nomeDoPredio:
+   *              type: string
+   *            codigoDoPredio:
+   *              type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      401:
+   *        description: The code already exist
+   *      500:
+   *        description: Error inserting building
+   */
   //INSERE NOVO PRÉDIO NA COLEÇÃO DE PRÉDIOS
   async insert(request, response) {
 
@@ -123,6 +182,40 @@ module.exports = {
 
   },
 
+   /**
+   * @swagger
+   * /buildings/{buildingId}:
+   *  put:
+   *    tags: [Building]
+   *    description: use to update a building
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *      - in: body
+   *        name: building
+   *        schema:
+   *          type: object
+   *          required:
+   *            - campus
+   *            - totalDeSalas
+   *            - nomeDoPredio
+   *          properties:
+   *            campus:
+   *              type: string
+   *            totalDeSalas:
+   *              type: integer
+   *            nomeDoPredio:
+   *              type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      404:
+   *        description: There is no building with this Id
+   *      500:
+   *        description: Error updating building
+   */
   async update(request, response) {
 
     try {
@@ -165,6 +258,25 @@ module.exports = {
     }
   },
 
+  /**
+   * @swagger
+   * /buildings/{buildingId}:
+   *  delete:
+   *    tags: [Building]
+   *    description: use to delete one building
+   *    parameters:
+   *      - in: path
+   *        name: buildingId
+   *        required: true
+   *        type: string
+   *    responses:
+   *      200:
+   *        description: A successfull response
+   *      404:
+   *        description: There is no building with this code
+   *      500:
+   *        description: Error removing building
+   */
   async delete(request, response) {
     try {
       const buildingID = request.params.buildingId

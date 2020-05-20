@@ -5,7 +5,7 @@ const db = admin.firestore();
 
 
 async function getBuildings() {
-  const buildingCollection = db.collection('predios');
+  const buildingCollection = db.collection('buildings');
   let result = []
   await buildingCollection
     .get()
@@ -45,45 +45,45 @@ module.exports = {
     try {
       const buildings = await getBuildings();
       if (buildings.length == 0) {
-        return response.status(400).json({ error: 'Nenhum prédio' });
+        return response.status(404).json({ error: 'No building found' });
       }
       return response.status(200).json(buildings);
     } catch (e) {
       return response.status(500).json({
-        error: `Erro durante o processamento de busca de usuários. Espere um momento e tente novamente! Erro : ${e}`,
+        error: `Error while searching buildings. Error : ${e}`,
       });
     }
   },
 
   /**
    * @swagger
-   * /buildings/{buildingId}:
+   * /buildings/{buildingID}:
    *  get:
    *    tags: [Building]
    *    description: use to request only one building
    *    parameters:
    *      - in: path
-   *        name: buildingId
+   *        name: buildingID
    *        required: true
    *        type: string
    *    responses:
    *      200:
    *        description: A successfull response
-   *      401:
+   *      404:
    *        description: Building doesn't exit
    *      500:
    *        description: Error consulting building
    */
   async getOne(request, response) {
     try {
-      const buildingID = request.params.buildingId
+      const buildingID = request.params.buildingID
 
-      const buildingCollection = db.collection('predios')
+      const buildingCollection = db.collection('buildings')
 
       let building = null
 
       await buildingCollection
-        .where('codigoDoPredio', '==', buildingID)
+        .where('buildingID', '==', buildingID)
         .get()
         .then((snapshot) => {
           return snapshot.forEach((res) => {
@@ -92,7 +92,7 @@ module.exports = {
         })
 
       if (!building) {
-        return response.status(401).send(`Prédio com código ${buildingID} não existe`)
+        return response.status(404).send(`Building with code  ${buildingID} not found`)
       }
 
       return response.status(200).json(building);
@@ -101,7 +101,7 @@ module.exports = {
 
     catch (e) {
       return response.status(500).json({
-        error: `Erro ao consultar prédio : ${e}`,
+        error: `Error consulting building : ${e}`,
       });
     }
 
@@ -120,20 +120,20 @@ module.exports = {
    *          type: object
    *          required:
    *            - campus
-   *            - totalDeSalas
-   *            - nomeDoPredio
-   *            - codigoDoPredio
+   *            - numberOfRooms
+   *            - buildingName
+   *            - buildingID
    *          properties:
    *            campus: 
    *              type: string
-   *            totalDeSalas:
+   *            numberOfRooms:
    *              type: integer
-   *            nomeDoPredio:
+   *            buildingName:
    *              type: string
-   *            codigoDoPredio:
+   *            buildingID:
    *              type: string
    *    responses:
-   *      200:
+   *      201:
    *        description: A successfull response
    *      401:
    *        description: The code already exist
@@ -144,14 +144,14 @@ module.exports = {
   async insert(request, response) {
 
     try {
-      const { campus, totalDeSalas, nomeDoPredio, codigoDoPredio, } = request.body
+      const { campus, numberOfRooms, buildingName, buildingID, } = request.body
 
-      const buildingCollection = db.collection('predios')
+      const buildingCollection = db.collection('buildings')
 
       let firebaseBuiding = null
 
       await buildingCollection
-        .where('codigoDoPredio', '==', codigoDoPredio)
+        .where('buildingID', '==', buildingID)
         .get()
         .then((snapshot) => {
           return snapshot.forEach((res) => {
@@ -160,23 +160,26 @@ module.exports = {
         })
 
       if (firebaseBuiding) {
-        return response.status(401).send("Prédio com código já existente")
+        return response.status(401).send(`Building with code ${buildingID} already exists`)
       }
 
-      await buildingCollection.add({
-        codigoDoPredio: codigoDoPredio,
-        nomeDoPredio: nomeDoPredio,
+      const createdBuilding = {
+        buildingID: buildingID,
+        buildingName: buildingName,
         campus: campus,
-        totalDeSalas: totalDeSalas
-      })
+        numberOfRooms: numberOfRooms
+      }
 
-      return response.status(200).send({ success: true })
+      await buildingCollection.add(createdBuilding)
+
+      return response.status(201).send({ success: true,
+      data: createdBuilding })
 
     }
 
     catch (e) {
       return response.status(500).json({
-        error: `Erro ao inserir prédio : ${e}`,
+        error: `Error inserting building : ${e}`,
       });
     }
 
@@ -184,13 +187,13 @@ module.exports = {
 
    /**
    * @swagger
-   * /buildings/{buildingId}:
+   * /buildings/{buildingID}:
    *  put:
    *    tags: [Building]
    *    description: use to update a building
    *    parameters:
    *      - in: path
-   *        name: buildingId
+   *        name: buildingID
    *        required: true
    *        type: string
    *      - in: body
@@ -199,35 +202,35 @@ module.exports = {
    *          type: object
    *          required:
    *            - campus
-   *            - totalDeSalas
-   *            - nomeDoPredio
+   *            - numberOfRooms
+   *            - buildingName
    *          properties:
    *            campus:
    *              type: string
-   *            totalDeSalas:
+   *            numberOfRooms:
    *              type: integer
-   *            nomeDoPredio:
+   *            buildingName:
    *              type: string
    *    responses:
    *      200:
    *        description: A successfull response
    *      404:
-   *        description: There is no building with this Id
+   *        description: Not found
    *      500:
    *        description: Error updating building
    */
   async update(request, response) {
 
     try {
-      const buildingID = request.params.buildingId
+      const buildingID = request.params.buildingID
 
-      const { campus, totalDeSalas, nomeDoPredio } = request.body
+      const { campus, numberOfRooms, buildingName } = request.body
 
-      const buildingCollection = db.collection('predios')
+      const buildingCollection = db.collection('buildings')
 
       let building = null
       await buildingCollection
-        .where('codigoDoPredio', '==', buildingID)
+        .where('buildingID', '==', buildingID)
         .get()
         .then((snapshot) => {
           return snapshot.forEach((res) => {
@@ -239,53 +242,59 @@ module.exports = {
         })
 
       if (!building) {
-        return response.status(404).send(`Nenhum prédio encontrado com o código ${buildingID}`)
+        return response.status(404).send(`No building found with id ${buildingID}`)
       }
 
-      await buildingCollection.doc(building.id).update({
-        nomeDoPredio: nomeDoPredio,
+      const updatedBuilding = {
+        buildingName: buildingName,
         campus: campus,
-        totalDeSalas: totalDeSalas
-      })
+        numberOfRooms: numberOfRooms
+      }
+
+      await buildingCollection.doc(building.id).update(updatedBuilding)
 
       return response
         .status(200)
-        .send({ success: true, msg: 'Prédio atualizado com sucesso' });
+        .send({ 
+          success: true, 
+          message: 'Building successfully updated', 
+          data: updatedBuilding
+        });
     } catch (error) {
       return response.status(500).json({
-        error: `Erro ao atualizar prédio : ${error}`,
+        error: `Error updating building : ${error}`,
       });
     }
   },
 
   /**
    * @swagger
-   * /buildings/{buildingId}:
+   * /buildings/{buildingID}:
    *  delete:
    *    tags: [Building]
    *    description: use to delete one building
    *    parameters:
    *      - in: path
-   *        name: buildingId
+   *        name: buildingID
    *        required: true
    *        type: string
    *    responses:
-   *      200:
+   *      204:
    *        description: A successfull response
    *      404:
-   *        description: There is no building with this code
+   *        description: Not found
    *      500:
    *        description: Error removing building
    */
   async delete(request, response) {
     try {
-      const buildingID = request.params.buildingId
+      const buildingID = request.params.buildingID
 
-      const buildingCollection = db.collection('predios')
+      const buildingCollection = db.collection('buildings')
 
       let building = null
       await buildingCollection
-        .where('codigoDoPredio', '==', buildingID)
+        .where('buildingID', '==', buildingID)
         .get()
         .then((snapshot) => {
           return snapshot.forEach((res) => {
@@ -297,17 +306,17 @@ module.exports = {
         })
 
       if (!building) {
-        return response.status(404).send(`Nenhum prédio encontrado com o código ${buildingID}`)
+        return response.status(404).send(`No building found with code ${buildingID}`)
       }
 
       await buildingCollection.doc(building.id).delete()
 
       return response
-        .status(200)
-        .send({ success: true, msg: `Prédio ${buildingID} removido com sucesso` });
+        .status(204)
+        .send({ success: true, msg: `Building with ${buildingID} successfully removed` });
     } catch (error) {
       return response.status(500).json({
-        error: `Erro ao remover prédio : ${error}`,
+        error: `Error removing building : ${error}`,
       });
     }
   }

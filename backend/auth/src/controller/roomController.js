@@ -3,10 +3,10 @@ import admin from '../database/connection';
 const db = admin.firestore();
 
 async function getBuilding(buildingID) {
-    const buildingCollection = db.collection('predios');
+    const buildingCollection = db.collection('buildings');
     let building = null
     await buildingCollection
-        .where('codigoDoPredio', '==', buildingID)
+        .where('buildingID', '==', buildingID)
         .get()
         .then((snapshot) => {
             return snapshot.forEach((res) => {
@@ -28,7 +28,7 @@ async function getRoom(collection, roomNumber) {
     let room = null
 
     await collection
-        .where('numeroDaSala', '==', roomNumber)
+        .where('roomNumber', '==', roomNumber)
         .get()
         .then((snapshot) => {
             return snapshot.forEach((res) => {
@@ -54,13 +54,13 @@ module.exports = {
  */
     /**
    * @swagger
-   * /buildings/{buildingId}/rooms:
+   * /buildings/{buildingID}/rooms:
    *  get:
    *    tags: [Room]
    *    description: use to request all rooms
    *    parameters:
    *      - in: path
-   *        name: buildingId
+   *        name: buildingID
    *        required: true
    *        type: string
    *    responses:
@@ -72,28 +72,28 @@ module.exports = {
    *        description: Error consulting room
    */
     async getAll(request, response) {
-        const buildingID = request.params.buildingId;
+        const buildingID = request.params.buildingID;
         const building = await getBuilding(buildingID)
         const result = []
         if (!building) {
-            return response.status(400).send(`Nenhum prédio encontrado com a id ${buildingID}`)
+            return response.status(404).send(`No room found with id ${buildingID}`)
         }
-        await db.collection('predios').doc(building.id)
-            .collection('salas')
+        await db.collection('buildings').doc(building.id)
+            .collection('rooms')
             .get()
             .then((snapshot) => {
                 return snapshot.forEach((res) => {
                     const data = res.data()
                     result.push({
-                        numeroDaSala: data.numeroDaSala,
-                        tipoDeSala: data.tipoDeSala,
-                        capacidadeDeAlunos: data.capacidadeDeAlunos
+                        roomNumber: data.roomNumber,
+                        roomType: data.roomType,
+                        roomCapacity: data.roomCapacity
                     })
                 });
             })
             .catch((error) => {
                 return response.status.status(500).json({
-                    error: `Erro ao verificar salas : ${e}`,
+                    error: `Error geting rooms : ${e}`,
                 });
             });
 
@@ -102,17 +102,17 @@ module.exports = {
 
     /**
    * @swagger
-   * /buildings/{buildingId}/rooms/{roomId}:
+   * /buildings/{buildingID}/rooms/{roomID}:
    *  get:
    *    tags: [Room]
    *    description: use to request only one room
    *    parameters:
    *      - in: path
-   *        name: buildingId
+   *        name: buildingID
    *        required: true
    *        type: string
    *      - in: path
-   *        name: roomId
+   *        name: roomID
    *        required: true
    *        type: string
    *    responses:
@@ -126,22 +126,24 @@ module.exports = {
     async getOne(request, response) {
 
         try {
-            const buildingID = request.params.buildingId;
-            const roomID = request.params.roomId;
+            const buildingID = request.params.buildingID;
+            const roomID = request.params.roomID;
+            console.log(roomID)
+            console.log(buildingID)
 
             const building = await getBuilding(buildingID);
 
             if (!building) {
-                return response.status(400).send(`Nenhum prédio encontrado com o id ${buildingID}`)
+                return response.status(404).send(`No building found with id ${buildingID}`)
             }
 
-            const collection = await await db.collection('predios').doc(building.id)
-                .collection('salas')
+            const collection = await await db.collection('buildings').doc(building.id)
+                .collection('rooms')
 
             const firebaseRoom = await getRoom(collection, roomID)
 
             if (!firebaseRoom) {
-                return response.status(404).send(`Sala com número ${numeroDaSala} não existe`)
+                return response.status(404).send(`Room with number ${roomNumber} not found`)
             }
 
             response.status(200).send(firebaseRoom.data)
@@ -150,7 +152,7 @@ module.exports = {
 
         } catch (e) {
             return response.status(500).json({
-                error: `Erro ao inserir sala : ${e}`,
+                error: `Error inserting room : ${e}`,
             });
         }
 
@@ -158,13 +160,13 @@ module.exports = {
 
     /**
    * @swagger
-   * /buildings/{buildingId}/rooms:
+   * /buildings/{buildingID}/rooms:
    *  post:
    *    tags: [Room]
    *    description: use to create a new room
    *    parameters:
    *      - in: path
-   *        name: buildingId
+   *        name: buildingID
    *        required: true
    *        type: string
    *      - in: body
@@ -172,15 +174,15 @@ module.exports = {
    *        schema:
    *          type: object
    *          required:
-   *            - numeroDaSala
-   *            - tipoDeSala
-   *            - capacidadeDeAlunos
+   *            - roomNumber
+   *            - roomType
+   *            - roomCapacity
    *          properties:
-   *            numeroDaSala: 
+   *            roomNumber: 
    *              type: string
-   *            tipoDeSala:
+   *            roomType:
    *              type: string
-   *            capacidadeDeAlunos:
+   *            roomCapacity:
    *              type: integer
    *    responses:
    *      200:
@@ -195,37 +197,41 @@ module.exports = {
     async insert(request, response) {
 
         try {
-            const buildingID = request.params.buildingId;
-            const { numeroDaSala, tipoDeSala, capacidadeDeAlunos } = request.body;
+            const buildingID = request.params.buildingID;
+            const { roomNumber, roomType, roomCapacity } = request.body;
 
             const building = await getBuilding(buildingID);
 
             if (!building) {
-                return response.status(400).send(`Nenhum prédio encontrado com o id ${buildingID}`)
+                return response.status(404).send(`No building found with id ${buildingID}`)
             }
 
-            const collection = await await db.collection('predios').doc(building.id)
-                .collection('salas')
+            const collection = await await db.collection('buildings').doc(building.id)
+                .collection('rooms')
 
-            const firebaseRoom = await getRoom(collection, numeroDaSala)
+            const firebaseRoom = await getRoom(collection, roomNumber)
 
             if (firebaseRoom) {
-                return response.status(401).send(`Sala com número ${numeroDaSala} já existente`)
+                return response.status(401).send(`Room with number ${roomNumber} already exists`)
+            }
+
+            const newRoom = {
+                roomNumber: roomNumber,
+                    roomType: roomType,
+                    roomCapacity: roomCapacity
             }
 
             collection
-                .add({
-                    numeroDaSala: numeroDaSala,
-                    tipoDeSala: tipoDeSala,
-                    capacidadeDeAlunos: capacidadeDeAlunos
+                .add(newRoom)
 
-                })
-
-            return response.status(200).send({ success: true });
+            return response.status(201).send({ 
+                success: true,
+                data: newRoom
+             });
 
         } catch (e) {
             return response.status(500).json({
-                error: `Erro ao inserir sala : ${e}`,
+                error: `Error inserting room : ${e}`,
             });
         }
 
@@ -234,17 +240,17 @@ module.exports = {
 
     /**
    * @swagger
-   * /buildings/{buildingId}/rooms/{roomId}:
+   * /buildings/{buildingID}/rooms/{roomID}:
    *  put:
    *    tags: [Room]
    *    description: use to update a room
    *    parameters:
    *      - in: path
-   *        name: buildingId
+   *        name: buildingID
    *        required: true
    *        type: string
    *      - in: path
-   *        name: roomId
+   *        name: roomID
    *        required: true
    *        type: string
    *      - in: body
@@ -252,12 +258,12 @@ module.exports = {
    *        schema:
    *          type: object
    *          required:
-   *            - tipoDeSala
-   *            - capacidadeDeAlunos
+   *            - roomType
+   *            - roomCapacity
    *          properties:
-   *            tipoDeSala:
+   *            roomType:
    *              type: string
-   *            capacidadeDeAlunos:
+   *            roomCapacity:
    *              type: integer
    *    responses:
    *      200:
@@ -271,59 +277,69 @@ module.exports = {
    */
     async update(request, response) {
         try {
-            const buildingID = request.params.buildingId;
-            const roomID = request.params.roomId;
-            const { tipoDeSala, capacidadeDeAlunos } = request.body;
+            const buildingID = request.params.buildingID;
+            const roomID = request.params.roomID;
+            const { roomType, roomCapacity } = request.body;
 
             const building = await getBuilding(buildingID);
 
             if (!building) {
-                return response.status(404).send(`Nenhum prédio encontrado com o id ${buildingID}`)
+                return response.status(404).send(`No building found with id ${buildingID}`)
             }
 
-            const collection = await await db.collection('predios').doc(building.id)
-                .collection('salas')
+            const collection = await await db.collection('buildings').doc(building.id)
+                .collection('rooms')
 
             const firebaseRoom = await getRoom(collection, roomID)
 
             if (!firebaseRoom) {
-                response.status(401).send(`Nenhuma sala encontrada com o número ${roomID}`);
+                response.status(404).send(`No room found with id ${roomID}`);
+            }
+
+            const updatedRoom = {
+                roomNumber: buildingID,
+                roomType: roomType,
+                roomCapacity: roomCapacity
             }
 
             collection.doc(firebaseRoom.id).update({
-                tipoDeSala: tipoDeSala,
-                capacidadeDeAlunos: capacidadeDeAlunos
+                roomType: roomType,
+                roomCapacity: roomCapacity
             })
 
             return response
                 .status(200)
-                .send({ success: true, msg: 'Sala atualizada com sucesso' });
+                .send({ 
+                    success: true, 
+                    message: 'Room successfully updated',
+                    data: updatedRoom
+             });
 
 
         } catch (error) {
             return response.status(500).json({
-                error: `Erro ao atualizar sala : ${error}`,
+                error: `Error updating room : ${error}`,
             });
         }
     },
 
     /**
    * @swagger
-   * /buildings/{buildingId}/rooms/{roomId}:
+   * /buildings/{buildingID}/rooms/{roomID}:
    *  delete:
    *    tags: [Room]
    *    description: use to delete one room
    *    parameters:
    *      - in: path
-   *        name: buildingId
+   *        name: buildingID
    *        required: true
    *        type: string
    *      - in: path
-   *        name: roomId
+   *        name: roomID
    *        required: true
    *        type: string
    *    responses:
-   *      200:
+   *      204:
    *        description: A successfull response
    *      404:
    *        description: There is no room with this number
@@ -333,33 +349,33 @@ module.exports = {
     async delete(request, response) {
 
         try {
-            const buildingID = request.params.buildingId;
-            const roomID = request.params.roomId;
+            const buildingID = request.params.buildingID;
+            const roomID = request.params.roomID;
 
             const building = await getBuilding(buildingID);
 
             if (!building) {
-                return response.status(404).send(`Nenhum prédio encontrado com o id ${buildingID}`)
+                return response.status(404).send(`No building found with id ${buildingID}`)
             }
 
-            const collection = await await db.collection('predios').doc(building.id)
-                .collection('salas')
+            const collection = await await db.collection('buildings').doc(building.id)
+                .collection('rooms')
 
             const firebaseRoom = await getRoom(collection, roomID)
 
             if (!firebaseRoom) {
-                response.status(404).send(`Nenhuma sala encontrada com o número ${roomID}`);
+                response.status(404).send(`No room found with number ${roomID}`);
             }
 
             collection.doc(firebaseRoom.id).delete()
 
             return response
-                .status(200)
-                .send({ success: true, msg: `Sala ${roomID} removida com sucesso` });
+                .status(204)
+                .send({ success: true, message: `Room ${roomID} successfully removed` });
 
         } catch (error) {
             return response.status(500).json({
-                error: `Erro ao remover sala: ${error}`,
+                error: `Error removing room: ${error}`,
             });
         }
 

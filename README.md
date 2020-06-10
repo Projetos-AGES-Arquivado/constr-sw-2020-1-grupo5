@@ -5,7 +5,7 @@ Keycloak na Amazon = http://18.228.30.125:8080/auth/
 
 Caso de teste para o postman = http://18.228.30.125:3456/login
 
-Documentação da api = http://18.228.30.125:3456/api
+Documentação da api = https://stark-gorge-03313.herokuapp.com/api
 
 Body = 
     {
